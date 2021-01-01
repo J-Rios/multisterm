@@ -121,6 +121,7 @@ def serial_terminal(port, bauds):
     # Launching Serial read and write threads
     th_read = Thread(target=th_serial_read, args=(ser,))
     th_write = Thread(target=th_serial_write, args=(ser,))
+    print("\nSerial Terminal Start")
     th_read.start()
     th_write.start()
     th_read.join()
@@ -142,9 +143,10 @@ def th_serial_read(ser):
 def th_serial_write(ser):
     '''Serial Terminal write thread.'''
     global g_terminal_close
+    print("Write \"--exit--\" to quit.\n")
     while not g_terminal_close:
         write_str = stdin_input()
-        if write_str == "--quit--":
+        if write_str == "--exit--":
             g_terminal_close = True
             break
         serial_write(ser, write_str)
@@ -157,7 +159,6 @@ def main(argc, argv):
     '''Main Function.'''
     # Check and parse program options from arguments
     options = parse_options()
-    print(options)
     # Serial Port
     serial_port = ""
     if options["port"] is None:
